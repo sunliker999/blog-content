@@ -1,5 +1,5 @@
 pragma solidity ^0.5.0;
-
+ 
 // ----------------------------------------------------------------------------
 // Safe maths
 // ----------------------------------------------------------------------------
@@ -21,8 +21,8 @@ library SafeMath {
         c = a / b;
     }
 }
-
-
+ 
+ 
 // ----------------------------------------------------------------------------
 // ERC Token Standard #20 Interface
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
@@ -34,12 +34,12 @@ contract ERC20Interface {
     function transfer(address to, uint tokens) public returns (bool success);
     function approve(address spender, uint tokens) public returns (bool success);
     function transferFrom(address from, address to, uint tokens) public returns (bool success);
-
+ 
     event Transfer(address indexed from, address indexed to, uint tokens);
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 }
-
-
+ 
+ 
 // ----------------------------------------------------------------------------
 // Contract function to receive approval and execute function in one call
 //
@@ -48,26 +48,26 @@ contract ERC20Interface {
 contract ApproveAndCallFallBack {
     function receiveApproval(address from, uint256 tokens, address token, bytes memory data) public;
 }
-
-
+ 
+ 
 // ----------------------------------------------------------------------------
 // Owned contract
 // ----------------------------------------------------------------------------
 contract Owned {
     address public owner;
     address public newOwner;
-
+ 
     event OwnershipTransferred(address indexed _from, address indexed _to);
-
+ 
     constructor() public {
         owner = msg.sender;
     }
-
+ 
     modifier onlyOwner {
         require(msg.sender == owner);
         _;
     }
-
+ 
     function transferOwnership(address _newOwner) public onlyOwner {
         newOwner = _newOwner;
     }
@@ -78,53 +78,54 @@ contract Owned {
         newOwner = address(0);
     }
 }
-
-
+ 
+ 
 // ----------------------------------------------------------------------------
 // ERC20 Token, with the addition of symbol, name and decimals and a
 // fixed supply
 // ----------------------------------------------------------------------------
 contract AirToken is ERC20Interface, Owned {
     using SafeMath for uint;
-
+ 
     string public symbol;
     string public  name;
     uint8 public decimals;
     uint _totalSupply;
-
+ 
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) allowed;
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
     constructor() public {
-        symbol = "AirCoin";
-        name = "空氣幣";
-        decimals = 3;
-        _totalSupply = 200000000 * 10**uint(decimals);
-        balances[0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFF] = _totalSupply;
-        emit Transfer(address(0), 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, _totalSupply);
-    }
+    	symbol = "GTX";
+    	name = "GotEM";
+    	decimals = 18;
+    	_totalSupply = 389000000 * 18**uint(decimals);
+    	balances[0xd2FeaDF664f6c0f670BDd7b724D2cB414790d660] = _totalSupply;
+    	emit Transfer(address(0), 0xd2FeaDF664f6c0f670BDd7b724D2cB414790d660, _totalSupply);
+	}
 
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Total supply
     // ------------------------------------------------------------------------
     function totalSupply() public view returns (uint) {
         return _totalSupply.sub(balances[address(0)]);
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Get the token balance for account `tokenOwner`
     // ------------------------------------------------------------------------
     function balanceOf(address tokenOwner) public view returns (uint balance) {
         return balances[tokenOwner];
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Transfer the balance from token owner's account to `to` account
     // - Owner's account must have sufficient balance to transfer
@@ -136,8 +137,8 @@ contract AirToken is ERC20Interface, Owned {
         emit Transfer(msg.sender, to, tokens);
         return true;
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Token owner can approve for `spender` to transferFrom(...) `tokens`
     // from the token owner's account
@@ -151,8 +152,8 @@ contract AirToken is ERC20Interface, Owned {
         emit Approval(msg.sender, spender, tokens);
         return true;
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Transfer `tokens` from the `from` account to the `to` account
     //
@@ -169,8 +170,8 @@ contract AirToken is ERC20Interface, Owned {
         emit Transfer(from, to, tokens);
         return true;
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Returns the amount of tokens approved by the owner that can be
     // transferred to the spender's account
@@ -178,8 +179,8 @@ contract AirToken is ERC20Interface, Owned {
     function allowance(address tokenOwner, address spender) public view returns (uint remaining) {
         return allowed[tokenOwner][spender];
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Token owner can approve for `spender` to transferFrom(...) `tokens`
     // from the token owner's account. The `spender` contract function
@@ -191,16 +192,16 @@ contract AirToken is ERC20Interface, Owned {
         ApproveAndCallFallBack(spender).receiveApproval(msg.sender, tokens, address(this), data);
         return true;
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Don't accept ETH
     // ------------------------------------------------------------------------
     function () external payable {
         revert();
     }
-
-
+ 
+ 
     // ------------------------------------------------------------------------
     // Owner can transfer out any accidentally sent ERC20 tokens
     // ------------------------------------------------------------------------
